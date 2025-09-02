@@ -2,11 +2,18 @@ import cx_Oracle
 from tkinter import messagebox
 from database.connection import get_connection
 
+# 👈 importa el adaptador
+from convertir_zref import cargar_zref
+
 def insert_data(df, file_type):
     try:
         if df.empty:
             return None
         else:
+            # 👈 si es ZREF, pasamos el DataFrame por el adaptador
+            if file_type.lower() == "zref":
+                df = cargar_zref(df)
+
             # Crear el DSN y conectar a la base de datos
             connection = get_connection()
             cursor = connection.cursor()

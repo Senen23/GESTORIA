@@ -13,7 +13,7 @@ class CheckTab:
     def __init__(self, tab):
         self.tab = tab
         self.create_check_tab()
-        
+         
     def create_check_tab(self):
         self.main_frame = ttk.Frame(self.tab)
         self.main_frame.pack(fill='both', expand=True)

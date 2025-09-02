@@ -153,8 +153,35 @@ class CheckCargasTab:
         return "white"
 
     def enviar_correos(self):
-        
-        self.tabla_pivote
+        """Exporta la tabla pivote a Excel y la envía por correo usando Outlook."""
+        try:
+            if not hasattr(self, "tabla_pivote") or self.tabla_pivote.empty:
+                tk.messagebox.showerror("Error", "No hay informe para enviar.")
+                return
+
+            # Guardar tabla como archivo Excel temporal
+            temp_file = os.path.join(os.getcwd(), "informe_cs2.xlsx")
+            self.tabla_pivote.to_excel(temp_file, index=True)
+
+            # Crear correo en Outlook
+            outlook = win32.Dispatch('outlook.application')
+            mail = outlook.CreateItem(0)
+            mail.To = "destinatario@correo.com"  # Cambia por el correo real
+            mail.Subject = "Informe CS2"
+            mail.Body = "Adjunto el informe CS2 generado automáticamente."
+            mail.Attachments.Add(temp_file)
+
+            # Enviar el correo
+            mail.Send()
+
+            tk.messagebox.showinfo("Correo enviado", "El informe fue enviado con éxito.")
+
+            # Borrar archivo temporal
+            os.remove(temp_file)
+
+        except Exception as e:
+            tk.messagebox.showerror("Error", f"No se pudo enviar el correo:\n{e}")
+
         
     def resource_path(self, relative_path):
         """ Devuelve la ruta absoluta del recurso, ya sea en desarrollo o en el ejecutable """
